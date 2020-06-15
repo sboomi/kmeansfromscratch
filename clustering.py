@@ -30,16 +30,16 @@ class KMeans:
         labels = self.__assign_labels(centroids)
         for cluster in range(self.k):
             next_centroid[cluster,:] = np.mean(self.X[labels==cluster],axis=0)
-        return next_centroid
+        return next_centroid, labels
 
     def place_centroids(self):
         X_bounds = (np.min(self.X, axis=0), np.max(self.X, axis=0))
         init_centroids = self.__initialize_centroids(X_bounds)
-        curr_centroids = self.__compute_next_iter(init_centroids)
+        curr_centroids, labels = self.__compute_next_iter(init_centroids)
         nbr_of_iterations = 0
         while (np.round(curr_centroids,3)!=np.round(init_centroids,3)).all():
             nbr_of_iterations += 1
-            curr_centroids = self.__compute_next_iter(curr_centroids)
+            curr_centroids, labels = self.__compute_next_iter(curr_centroids)
             if nbr_of_iterations == self.parameters['threshold']:
                 break       
         return curr_centroids, labels
